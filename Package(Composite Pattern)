@@ -1,0 +1,117 @@
+package Package;
+
+public class Package extends StorageItem {
+    String name;
+    ArrayList<StorageItem> includedItems = new ArrayList();
+
+    public Package(String name) {
+        this.name = name;
+    }
+
+    public void add(StorageItem item) {
+        this.includedItems.add(item);
+    }
+
+    public void showLevel() {
+        System.out.println(this.name + " level: " + this.level);
+    }
+
+    public void ls() {
+        System.out.println(Storage.compositeBuilder + this.name + ":" + Storage.level);
+        ++Storage.level;
+        Storage.compositeBuilder.append("\t");
+        Iterator nr1 = this.includedItems.iterator();
+
+        while(nr1.hasNext()) {
+            StorageItem item = (StorageItem)nr1.next();
+            item.level = Storage.level;
+            item.ls();
+        }
+
+    }
+}
+
+
+
+----------------------------------------------------------------------------
+
+package Package;
+
+public class Product extends StorageItem {
+    String name;
+
+    public Product(String name) {
+        this.name = name;
+    }
+
+    public void showLevel() {
+        System.out.println(this.name + " level: " + this.level);
+    }
+
+    public void ls() {
+        System.out.println(Storage.compositeBuilder + this.name + ":" + Storage.level);
+    }
+}
+----------------------------------------------------------------------------
+
+
+
+
+package Package;
+
+public class Storage {
+    public static StringBuilder compositeBuilder = new StringBuilder();
+    public static int level = 1;
+
+    public Storage() {
+    }
+
+    public void listStorageStructure() {
+        System.out.println("Storage");
+        Product telephone = new Product("T");
+        Product clothes = new Product("C");
+        Product perfume = new Product("P");
+        Package package1 = new Package("p1");
+        Package package2 = new Package("p2");
+        Package package3  = new Package("p3");
+        package1.add(telephone);
+        package1.add(package3);
+        package2.add(package2);
+        package3.add(telephone);
+        package3.add(clothes);
+        package.ls();
+        perfume.showLevel();
+    }
+}
+
+---------------------------------------------------------------------
+package Package;
+
+
+
+public class Main {
+    public Main() {
+    }
+
+    public static void main(String[] args) {
+        Storage storage = new Storage();
+        storage.listStorageStructure();
+    }
+}
+ 
+--------------------------------------------------------------------- 
+
+
+
+package Package;
+
+public abstract class StorageItem {
+    int level;
+
+    public StorageItem() {
+    }
+
+    abstract void ls();
+
+    abstract void showLevel();
+}
